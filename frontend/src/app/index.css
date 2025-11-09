@@ -1,0 +1,218 @@
+@import "tailwindcss/preflight";
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+
+  --primary: 14 70% 55%;
+  --primary-foreground: 0 0% 98%;
+
+  --secondary: 14 30% 85%;
+  --secondary-foreground: 14 50% 30%;
+
+  --muted: 14 25% 90%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+
+  --accent: 14 35% 80%;
+  --accent-foreground: 14 50% 30%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 14 70% 55%;
+
+  --radius: 0.5rem;
+
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 14 70% 55%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 14 30% 85%;
+  --sidebar-accent-foreground: 14 50% 30%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 14 70% 55%;
+
+  /* Добавляем цвета для тенниса */
+  --tennis-clay: 184 45% 42%;
+  --tennis-dark-clay: 156 46% 37%;
+  --tennis-light-clay: 14 30% 85%;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+
+  --primary: 14 80% 65%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 14 80% 65%;
+
+  --sidebar-background: 240 5.9% 10%;
+  --sidebar-foreground: 240 4.8% 95.9%;
+  --sidebar-primary: 14 80% 65%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 240 3.7% 15.9%;
+  --sidebar-accent-foreground: 240 4.8% 95.9%;
+  --sidebar-border: 240 3.7% 15.9%;
+  --sidebar-ring: 14 80% 65%;
+}
+
+* {
+  @apply border-border;
+}
+
+body {
+  @apply bg-background text-foreground;
+}
+
+@layer utilities {
+  .court-pattern {
+    background-image: linear-gradient(
+        90deg,
+        rgba(184, 82, 45, 0.2) 1px,
+        transparent 1px
+      ),
+      linear-gradient(rgba(184, 82, 45, 0.2) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .clay-gradient {
+    background: linear-gradient(
+      135deg,
+      rgba(184, 82, 45, 0.8) 0%,
+      rgba(156, 68, 38, 0.8) 50%,
+      rgba(139, 57, 33, 0.8) 100%
+    );
+  }
+
+  .hero-bg {
+    background-image: url("https://images.unsplash.com/photo-1464207687429-7505649dae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2174&q=80");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .hover-lift {
+    transition: all 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(184, 82, 45, 0.2);
+  }
+
+  /* Параллакс оптимизация */
+  .parallax-bg {
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+
+  /* Цвета для тенниса как Tailwind классы */
+  .bg-tennis-clay {
+    background-color: rgb(184 82 45);
+  }
+
+  .bg-tennis-dark-clay {
+    background-color: rgb(156 68 38);
+  }
+
+  .bg-tennis-light-clay {
+    background-color: rgb(241 215 187);
+  }
+
+  .text-tennis-clay {
+    color: rgb(184 82 45);
+  }
+
+  .from-tennis-clay {
+    --tw-gradient-from: rgb(184 82 45);
+    --tw-gradient-to: rgb(184 82 45 / 0);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+
+  .to-tennis-dark-clay {
+    --tw-gradient-to: rgb(156 68 38);
+  }
+
+  .from-tennis-light-clay {
+    --tw-gradient-from: rgb(241 215 187);
+    --tw-gradient-to: rgb(241 215 187 / 0);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+
+  /* Анимация теннисного мяча */
+  .tennis-ball-animation {
+    font-size: 3rem;
+    position: absolute;
+    top: 50%;
+    left: -100px;
+    transform: translateY(-50%);
+    animation: ballBounce 4s ease-in-out forwards;
+    z-index: 30;
+  }
+
+  @keyframes ballBounce {
+    0% {
+      left: -100px;
+      transform: translateY(-50%) rotate(0deg) scale(1);
+    }
+    15% {
+      transform: translateY(-120px) rotate(180deg) scale(1.1);
+    }
+    25% {
+      left: 20%;
+      transform: translateY(-50%) rotate(360deg) scale(1);
+    }
+    40% {
+      transform: translateY(-80px) rotate(540deg) scale(1.05);
+    }
+    50% {
+      left: 40%;
+      transform: translateY(-50%) rotate(720deg) scale(1);
+    }
+    65% {
+      transform: translateY(-100px) rotate(900deg) scale(1.08);
+    }
+    75% {
+      left: 65%;
+      transform: translateY(-50%) rotate(1080deg) scale(1);
+    }
+    85% {
+      transform: translateY(-60px) rotate(1260deg) scale(1.03);
+    }
+    100% {
+      left: calc(100% + 100px);
+      transform: translateY(-50%) rotate(1440deg) scale(0.8);
+    }
+  }
+}

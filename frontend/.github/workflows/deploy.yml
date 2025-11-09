@@ -1,0 +1,35 @@
+name: Deploy to GitHub Pages # Название workflow (можно любое)
+
+on:
+  push:
+    branches: ["master"] # Запускать только при пуше в ветку main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # Используем свежий Ubuntu (бесплатный сервер от GitHub)
+
+    steps:
+      # 1. Копируем репозиторий на сервер GitHub
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Устанавливаем Node.js (нужен для Next.js)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18 # Версия Node.js (можно 20 или другую)
+
+      # 3. Устанавливаем зависимости (npm ci — быстрее, чем npm install)
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Собираем Next.js и экспортируем статику
+      - name: Build and Export
+        run: npm run build && npm run export
+
+      # 5. Деплоим в GitHub Pages
+      - name: Deploy to GH Pages
+        uses: peaceiris/actions-gh-pages@v3 # Готовое действие для деплоя
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Токен доступа (GitHub сам его подставит)
+          publish_dir: ./out # Папка со статикой (next export создаёт её)

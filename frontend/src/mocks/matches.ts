@@ -1,0 +1,850 @@
+import { groupBy } from "@/lib/utils";
+import { Match } from "./types";
+
+let id = 0;
+
+export const matches: Match[] = [
+  {
+    id: id++, //0
+    scoreUp: 7,
+    scoreDown: 5,
+    winner: 2,
+    tournamentId: 1,
+    player1: ["OLEG_KHATEEV", "SVETLANA_FROLOVA"],
+    player2: ["ALEKSEY_DOROSH", "YULIA_KHON"],
+    groupId: 1,
+  },
+  {
+    id: id++, //1
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 1,
+    tournamentId: 1,
+    player1: ["OLEG_KHATEEV", "SVETLANA_FROLOVA"],
+    player2: ["ALEKEI_IVANOV", "NASTYA_VOITOVICH"],
+    groupId: 1,
+  },
+  {
+    id: id++, //2
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 1,
+    tournamentId: 1,
+    player1: ["ALEKSEY_DOROSH", "YULIA_KHON"],
+    player2: ["ALEKEI_IVANOV", "NASTYA_VOITOVICH"],
+    groupId: 1,
+  },
+  {
+    id: id++, //3
+    player1: ["YAROSLAV_YAKOVLEV", "YANA_DJIGIT"],
+    player2: ["PAVEL_SAMOLOVOV", "VALERIA_IGAY"],
+    scoreUp: 6,
+    scoreDown: 4,
+    winner: 1,
+    tournamentId: 1,
+    groupId: 4,
+  },
+  {
+    id: id++, //4
+    player1: ["YAROSLAV_YAKOVLEV", "YANA_DJIGIT"],
+    player2: ["ANTON_SKAKA", "TANYA_LENE"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 1,
+    tournamentId: 1,
+    groupId: 4,
+  },
+  {
+    id: id++, //5
+    player1: ["PAVEL_SAMOLOVOV", "VALERIA_IGAY"],
+    player2: ["ANTON_SKAKA", "TANYA_LENE"],
+    scoreUp: 6,
+    scoreDown: 4,
+    winner: 2,
+    tournamentId: 1,
+    groupId: 4,
+  },
+  {
+    id: id++, //6
+    player1: ["EGOR_TARASOV", "OLGA_SHMAKOVA"],
+    player2: ["ANDREY_KOLT", "KATYA_KOLT"],
+    scoreUp: 6,
+    scoreDown: 4,
+    winner: 2,
+    tournamentId: 1,
+    groupId: 3,
+  },
+  {
+    id: id++, //7
+    player1: ["EGOR_TARASOV", "OLGA_SHMAKOVA"],
+    player2: ["SASHA_FRIDI", "NINA_MALOFEEVA"],
+    scoreUp: 7,
+    scoreDown: 6,
+    winner: 1,
+    tournamentId: 1,
+    groupId: 3,
+  },
+  {
+    id: id++, //8
+    player1: ["ANDREY_KOLT", "KATYA_KOLT"],
+    player2: ["SASHA_FRIDI", "NINA_MALOFEEVA"],
+    scoreUp: 6,
+    scoreDown: 4,
+    winner: 2,
+    tournamentId: 1,
+    groupId: 3,
+  },
+  {
+    id: id++, //9
+    player1: ["ANDREY_SHEVCHENKO", "EVG_CHYLGANOVA"],
+    player2: ["ANTON_KOSHEEV", "MARIA_HOVALIG"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 1,
+    tournamentId: 1,
+    groupId: 2,
+  },
+  {
+    id: id++, //10
+    player1: ["IGOR_SOLOVIEV", "TANYA_SIMONYAK"],
+    player2: ["ANTON_KOSHEEV", "MARIA_HOVALIG"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 1,
+    tournamentId: 1,
+    groupId: 2,
+  },
+  {
+    id: id++, //11
+    player1: ["IGOR_SOLOVIEV", "TANYA_SIMONYAK"],
+    player2: ["ANDREY_SHEVCHENKO", "EVG_CHYLGANOVA"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 1,
+    tournamentId: 1,
+    groupId: 2,
+  },
+  {
+    id: id++, //12
+    player1: ["ALEKSEY_DOROSH", "YULIA_KHON"],
+    player2: ["ANDREY_SHEVCHENKO", "EVG_CHYLGANOVA"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 1,
+    tournamentId: 1,
+    type: "upper",
+    round: "1/4",
+    nextMatch: 16,
+  },
+  {
+    id: id++, //13
+    player1: ["SASHA_FRIDI", "NINA_MALOFEEVA"],
+    player2: ["ANTON_SKAKA", "TANYA_LENE"],
+    scoreUp: 6,
+    scoreDown: 4,
+    winner: 2,
+    tournamentId: 1,
+    type: "upper",
+    round: "1/4",
+    nextMatch: 16,
+  },
+  {
+    id: id++, //14
+    player1: ["OLEG_KHATEEV", "SVETLANA_FROLOVA"],
+    player2: ["IGOR_SOLOVIEV", "TANYA_SIMONYAK"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 2,
+    tournamentId: 1,
+    type: "upper",
+    round: "1/4",
+    nextMatch: 17,
+  },
+  {
+    id: id++, //15
+    player1: ["YAROSLAV_YAKOVLEV", "YANA_DJIGIT"],
+    player2: ["ANDREY_KOLT", "KATYA_KOLT"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 1,
+    tournamentId: 1,
+    type: "upper",
+    round: "1/4",
+    nextMatch: 17,
+  },
+  {
+    id: id++, //16
+    player1: ["ALEKSEY_DOROSH", "YULIA_KHON"],
+    player2: ["ANTON_SKAKA", "TANYA_LENE"],
+    scoreUp: 6,
+    scoreDown: 4,
+    winner: 1,
+    tournamentId: 1,
+    type: "upper",
+    round: "1/2",
+    parentsMatch: [13, 12],
+    nextMatch: 18,
+  },
+  {
+    id: id++, //17
+    player1: ["YAROSLAV_YAKOVLEV", "YANA_DJIGIT"],
+    player2: ["IGOR_SOLOVIEV", "TANYA_SIMONYAK"],
+    scoreUp: 6,
+    scoreDown: 4,
+    winner: 1,
+    tournamentId: 1,
+    type: "upper",
+    round: "1/2",
+    parentsMatch: [15, 14],
+    nextMatch: 18,
+  },
+  {
+    id: id++, //18
+    player1: ["YAROSLAV_YAKOVLEV", "YANA_DJIGIT"],
+    player2: ["ALEKSEY_DOROSH", "YULIA_KHON"],
+    scoreUp: 6,
+    scoreDown: 4,
+    winner: 2,
+    tournamentId: 1,
+    type: "upper",
+    round: "final",
+    parentsMatch: [17, 16],
+  },
+  {
+    id: id++, //19
+    player1: ["IGOR_SOLOVIEV", "TANYA_SIMONYAK"],
+    player2: ["ANTON_SKAKA", "TANYA_LENE"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 1,
+    tournamentId: 1,
+    type: "upper",
+    round: "third",
+  },
+  {
+    id: id++, //20
+    player1: ["KATYA_KOLT"],
+    player2: ["YULIA_ASANOVA"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 2,
+    tournamentId: 2,
+    groupId: 1,
+  },
+  {
+    id: id++, //21
+    player1: ["KATYA_KOLT"],
+    player2: ["NATASHA_ZAYCEVA"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 2,
+    tournamentId: 2,
+    groupId: 1,
+  },
+  {
+    id: id++, //22
+    player1: ["YULIA_ASANOVA"],
+    player2: ["NATASHA_ZAYCEVA"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 2,
+    tournamentId: 2,
+    groupId: 1,
+  },
+  {
+    id: id++, //23
+    player1: ["SASHA_RESHETNIKOVA"],
+    player2: ["YULIA_ARTEMVIEVA"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 2,
+    tournamentId: 2,
+    groupId: 2,
+  },
+  {
+    id: id++, //24
+    player1: ["SASHA_RESHETNIKOVA"],
+    player2: ["TANYA_LENE"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 2,
+    tournamentId: 2,
+    groupId: 2,
+  },
+  {
+    id: id++, //25
+    player1: ["YULIA_ARTEMVIEVA"],
+    player2: ["TANYA_LENE"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 2,
+    tournamentId: 2,
+    groupId: 2,
+  },
+  {
+    id: id++, //26
+    player1: ["SVETLANA_FROLOVA"],
+    player2: ["NASTYA_VOITOVICH"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 2,
+    tournamentId: 2,
+    groupId: 3,
+  },
+  {
+    id: id++, //27
+    player1: ["SVETLANA_FROLOVA"],
+    player2: ["EVG_CHYLGANOVA"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 2,
+    tournamentId: 2,
+    groupId: 3,
+  },
+  {
+    id: id++, //28
+    player1: ["NASTYA_VOITOVICH"],
+    player2: ["EVG_CHYLGANOVA"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 2,
+    tournamentId: 2,
+    groupId: 3,
+  },
+  {
+    id: id++, //29
+    player1: ["KRISINA_OMELYANCHUK"],
+    player2: ["VALERIA_IGAY"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 2,
+    tournamentId: 2,
+    groupId: 4,
+  },
+  {
+    id: id++, //30
+    player1: ["KRISINA_OMELYANCHUK"],
+    player2: ["TAISIA_DRYGOCHENKO"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 2,
+    tournamentId: 2,
+    groupId: 4,
+  },
+  {
+    id: id++, //31
+    player1: ["VALERIA_IGAY"],
+    player2: ["TAISIA_DRYGOCHENKO"],
+    scoreUp: 6,
+    scoreDown: 4,
+    winner: 2,
+    tournamentId: 2,
+    groupId: 4,
+  },
+  {
+    id: id++, //32
+    player1: ["TANYA_LENE"],
+    player2: ["YULIA_ASANOVA"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 1,
+    tournamentId: 2,
+    type: "upper",
+    round: "1/4",
+  },
+  {
+    id: id++, //33
+    player1: ["TAISIA_DRYGOCHENKO"],
+    player2: ["NASTYA_VOITOVICH"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 1,
+    tournamentId: 2,
+    type: "upper",
+    round: "1/4",
+  },
+  {
+    id: id++, //34
+    player1: ["NATASHA_ZAYCEVA"],
+    player2: ["YULIA_ARTEMVIEVA"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 1,
+    tournamentId: 2,
+    type: "upper",
+    round: "1/4",
+  },
+  {
+    id: id++, //35
+    player1: ["EVG_CHYLGANOVA"],
+    player2: ["VALERIA_IGAY"],
+    scoreUp: 6,
+    scoreDown: 4,
+    winner: 2,
+    tournamentId: 2,
+    type: "upper",
+    round: "1/4",
+  },
+  {
+    id: id++, //36
+    player1: ["TANYA_LENE"],
+    player2: ["TAISIA_DRYGOCHENKO"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 2,
+    tournamentId: 2,
+    type: "upper",
+    round: "1/2",
+  },
+  {
+    id: id++, //37
+    player1: ["NATASHA_ZAYCEVA"],
+    player2: ["VALERIA_IGAY"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 1,
+    tournamentId: 2,
+    type: "upper",
+    round: "1/2",
+  },
+  {
+    id: id++, //38
+    player1: ["NATASHA_ZAYCEVA"],
+    player2: ["TAISIA_DRYGOCHENKO"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 2,
+    tournamentId: 2,
+    type: "upper",
+    round: "final",
+  },
+  {
+    id: id++, //39
+    player1: ["TANYA_LENE"],
+    player2: ["VALERIA_IGAY"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 1,
+    tournamentId: 2,
+    type: "upper",
+    round: "third",
+  },
+  {
+    id: id++, //40
+    player1: ["KSENIA_YPOROVA"],
+    player2: ["KONSTANTIN_GOLIKOV"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 1,
+    tournamentId: 3,
+    groupId: 1,
+  },
+  {
+    id: id++, //41
+    player1: ["YAROSLAV_YAKOVLEV"],
+    player2: ["KONSTANTIN_GOLIKOV"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 1,
+    tournamentId: 3,
+    groupId: 1,
+  },
+  {
+    id: id++, //42
+    player1: ["YAROSLAV_YAKOVLEV"],
+    player2: ["KSENIA_YPOROVA"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 1,
+    tournamentId: 3,
+    groupId: 1,
+  },
+  {
+    id: id++, //43
+    player1: ["PAVEL_SAMOLOVOV"],
+    player2: ["ANDREY_KOLT"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 1,
+    tournamentId: 3,
+    groupId: 2,
+  },
+  {
+    id: id++, //44
+    player1: ["IGOR_MAKARENKO"],
+    player2: ["ANDREY_KOLT"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 1,
+    tournamentId: 3,
+    groupId: 2,
+  },
+  {
+    id: id++, //45
+    player1: ["IGOR_MAKARENKO"],
+    player2: ["PAVEL_SAMOLOVOV"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 2,
+    tournamentId: 3,
+    groupId: 2,
+  },
+  {
+    id: id++, //46
+    player1: ["ALEKEI_IVANOV"],
+    player2: ["ARTEM_BURDEY"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 2,
+    tournamentId: 3,
+    groupId: 3,
+  },
+  {
+    id: id++, //47
+    player1: ["ALEKEI_IVANOV"],
+    player2: ["DENIS_MOSKALEV"],
+    scoreUp: 6,
+    scoreDown: 4,
+    winner: 2,
+    tournamentId: 3,
+    groupId: 3,
+  },
+  {
+    id: id++, //48
+    player1: ["ARTEM_BURDEY"],
+    player2: ["DENIS_MOSKALEV"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 2,
+    tournamentId: 3,
+    groupId: 3,
+  },
+  {
+    id: id++, //49
+    player1: ["SASHA_VLASECKIY"],
+    player2: ["MAKSIM_OMELYANCHUK"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 2,
+    tournamentId: 3,
+    groupId: 4,
+  },
+  {
+    id: id++, //50
+    player1: ["SASHA_VLASECKIY"],
+    player2: ["ANDREY_SHEVCHENKO"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 2,
+    tournamentId: 3,
+    groupId: 4,
+  },
+  {
+    id: id++, //51
+    player1: ["MAKSIM_OMELYANCHUK"],
+    player2: ["ANDREY_SHEVCHENKO"],
+    scoreUp: 7,
+    scoreDown: 5,
+    winner: 1,
+    tournamentId: 3,
+    groupId: 4,
+  },
+  {
+    id: id++, //52
+    player1: ["YAROSLAV_YAKOVLEV"],
+    player2: ["IGOR_MAKARENKO"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 2,
+    tournamentId: 3,
+    round: "1/4",
+    type: "upper",
+  },
+  {
+    id: id++, //53
+    player1: ["DENIS_MOSKALEV"],
+    player2: ["ANDREY_SHEVCHENKO"],
+    scoreUp: 6,
+    scoreDown: 4,
+    winner: 1,
+    tournamentId: 3,
+    round: "1/4",
+    type: "upper",
+  },
+  {
+    id: id++, //54
+    player1: ["KSENIA_YPOROVA"],
+    player2: ["PAVEL_SAMOLOVOV"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 2,
+    tournamentId: 3,
+    round: "1/4",
+    type: "upper",
+  },
+  {
+    id: id++, //55
+    player1: ["ARTEM_BURDEY"],
+    player2: ["MAKSIM_OMELYANCHUK"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 2,
+    tournamentId: 3,
+    round: "1/4",
+    type: "upper",
+  },
+  {
+    id: id++, //56
+    player1: ["IGOR_MAKARENKO"],
+    player2: ["DENIS_MOSKALEV"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 1,
+    tournamentId: 3,
+    round: "1/2",
+    type: "upper",
+  },
+  {
+    id: id++, //57
+    player1: ["PAVEL_SAMOLOVOV"],
+    player2: ["MAKSIM_OMELYANCHUK"],
+    scoreUp: 7,
+    scoreDown: 6,
+    winner: 1,
+    tournamentId: 3,
+    round: "1/2",
+    type: "upper",
+  },
+  {
+    id: id++, //58
+    player1: ["IGOR_MAKARENKO"],
+    player2: ["PAVEL_SAMOLOVOV"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 1,
+    tournamentId: 3,
+    round: "final",
+    type: "upper",
+  },
+  {
+    id: id++, //58
+    player1: ["DENIS_MOSKALEV"],
+    player2: ["MAKSIM_OMELYANCHUK"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 1,
+    tournamentId: 3,
+    round: "third",
+    type: "upper",
+  },
+  {
+    id: id++, //59
+    player1: ["MAKSIM_OMELYANCHUK"],
+    player2: ["ANDREY_KOLT"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 1,
+    tournamentId: 4,
+    groupId: 1,
+  },
+  {
+    id: id++, //60
+    player1: ["DENIS_MOSKALEV"],
+    player2: ["ANDREY_KOLT"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 1,
+    tournamentId: 4,
+    groupId: 1,
+  },
+  {
+    id: id++, //61
+    player1: ["DENIS_MOSKALEV"],
+    player2: ["MAKSIM_OMELYANCHUK"],
+    scoreUp: 7,
+    scoreDown: 5,
+    winner: 1,
+    tournamentId: 4,
+    groupId: 1,
+  },
+  {
+    id: id++, //62
+    player1: ["DMITRIY_PLAKSIN"],
+    player2: ["ROMAN_TASHKINOV"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 1,
+    tournamentId: 4,
+    groupId: 3,
+  },
+  {
+    id: id++, //63
+    player1: ["ALEKSEI_STRAHOVENKO"],
+    player2: ["ROMAN_TASHKINOV"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 1,
+    tournamentId: 4,
+    groupId: 3,
+  },
+  {
+    id: id++, //64
+    player1: ["ALEKSEI_STRAHOVENKO"],
+    player2: ["DMITRIY_PLAKSIN"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 2,
+    tournamentId: 4,
+    groupId: 3,
+  },
+  {
+    id: id++, //65
+    player1: ["ANTON_SKAKA"],
+    player2: ["EVG_RASSADNIKOV"],
+    scoreUp: 7,
+    scoreDown: 5,
+    winner: 2,
+    tournamentId: 4,
+    groupId: 2,
+  },
+  {
+    id: id++, //66
+    player1: ["ANTON_SKAKA"],
+    player2: ["ANDREY_SHEVCHENKO"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 2,
+    tournamentId: 4,
+    groupId: 2,
+  },
+  {
+    id: id++, //66
+    player1: ["EVG_RASSADNIKOV"],
+    player2: ["ANDREY_SHEVCHENKO"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 2,
+    tournamentId: 4,
+    groupId: 2,
+  },
+  {
+    id: id++, //67
+    player1: ["ALEKEI_IVANOV"],
+    player2: ["ALEKSEI_LOBKOV"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 2,
+    tournamentId: 4,
+    groupId: 4,
+  },
+  {
+    id: id++, //68
+    player1: ["ALEKEI_IVANOV"],
+    player2: ["PAVEL_SAMOLOVOV"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 2,
+    tournamentId: 4,
+    groupId: 4,
+  },
+  {
+    id: id++, //69
+    player1: ["ALEKSEI_LOBKOV"],
+    player2: ["PAVEL_SAMOLOVOV"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 2,
+    tournamentId: 4,
+    groupId: 4,
+  },
+  {
+    id: id++, //70
+    player1: ["DENIS_MOSKALEV"],
+    player2: ["EVG_RASSADNIKOV"],
+    scoreUp: 6,
+    scoreDown: 1,
+    winner: 1,
+    tournamentId: 4,
+    type: 'upper',
+    round: '1/4',
+  },
+  {
+    id: id++, //71
+    player1: ["DMITRIY_PLAKSIN"],
+    player2: ["ALEKSEI_LOBKOV"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 2,
+    tournamentId: 4,
+    type: 'upper',
+    round: '1/4',
+  },
+   {
+    id: id++, //72
+    player1: ["MAKSIM_OMELYANCHUK"],
+    player2: ["ANDREY_SHEVCHENKO"],
+    scoreUp: 7,
+    scoreDown: 6,
+    winner: 1,
+    tournamentId: 4,
+    type: 'upper',
+    round: '1/4',
+  },
+   {
+    id: id++, //73
+    player1: ["ALEKSEI_STRAHOVENKO"],
+    player2: ["PAVEL_SAMOLOVOV"],
+    scoreUp: 6,
+    scoreDown: 0,
+    winner: 2,
+    tournamentId: 4,
+    type: 'upper',
+    round: '1/4',
+  },
+  {
+    id: id++, //74
+    player1: ["DENIS_MOSKALEV"],
+    player2: ["ALEKSEI_LOBKOV"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 1,
+    tournamentId: 4,
+    type: 'upper',
+    round: '1/2',
+  },
+  {
+    id: id++, //74
+    player1: ["MAKSIM_OMELYANCHUK"],
+    player2: ["PAVEL_SAMOLOVOV"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 1,
+    tournamentId: 4,
+    type: 'upper',
+    round: '1/2',
+  },
+   {
+    id: id++, //75
+    player1: ["DENIS_MOSKALEV"],
+    player2: ["MAKSIM_OMELYANCHUK"],
+    scoreUp: 6,
+    scoreDown: 3,
+    winner: 2,
+    tournamentId: 4,
+    type: 'upper',
+    round: 'final',
+  },
+  {
+    id: id++, //76
+    player1: ["PAVEL_SAMOLOVOV"],
+    player2: ["ALEKSEI_LOBKOV"],
+    scoreUp: 6,
+    scoreDown: 2,
+    winner: 1,
+    tournamentId: 4,
+    type: 'upper',
+    round: 'third',
+  },
+];
+
+export const matchesByTournament = groupBy(matches, "tournamentId");
