@@ -9,7 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { createHash, randomInt } from 'crypto'; // Для генерации кода
 import { PrismaService } from 'database/prisma.service';
 import { UserUncheckedCreateInput } from 'generated/prisma/models';
-import { User } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { VerifyDto } from './dto/verify.dto';
 
@@ -70,8 +70,8 @@ export class AuthService {
     return code;
   }
 
-  async generateTokens(userId: number) {
-    const payload = { sub: userId };
+  async generateTokens(userId: number, userRole: Role) {
+    const payload = { id: userId, role: userRole };
 
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: '15m', // короткоживущий
@@ -127,12 +127,12 @@ export class AuthService {
       data: { used: true },
     });
 
-    return { tokens: await this.generateTokens(user.id), user };
+    return { tokens: await this.generateTokens(user.id, user.role), user };
   }
 
   // Проверка и обновление refresh-токена
   async refresh(refreshToken: string) {
-    let payload: {sub: number};
+    let payload: { id: number; userRole: Role };
     try {
       payload = this.jwtService.verify(refreshToken, {
         secret: process.env.JWT_REFRESH_TOKEN_SECRET,
@@ -142,7 +142,7 @@ export class AuthService {
     }
 
     const user = await this.prisma.user.findUnique({
-      where: { id: payload.sub },
+      where: { id: payload.id },
     });
     if (!user) {
       throw new UnauthorizedException('User not found');
@@ -161,7 +161,7 @@ export class AuthService {
     // ✅ Опционально: отзывать старый и выдавать новый
     await this.prisma.refreshToken.delete({ where: { id: storedToken.id } });
 
-    const newTokens = await this.generateTokens(user.id);
+    const newTokens = await this.generateTokens(user.id, user.role);
     return { tokens: newTokens, user };
   }
 

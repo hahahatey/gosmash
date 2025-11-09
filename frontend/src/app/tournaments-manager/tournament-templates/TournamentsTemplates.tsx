@@ -1,11 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { withOrganizerAuth } from "@/hoc/withOrganizerAuth";
 import { useTournamentsTemplates } from "@/hooks/useTournamentTemplates";
 import { PlusIcon, TrashIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
-export default function TournamentTemplates() {
+function TournamentTemplatesPage() {
   const { templates, deleteTemplateMutation } = useTournamentsTemplates();
   const pathname = usePathname();
   const router = useRouter();
@@ -51,3 +52,5 @@ export default function TournamentTemplates() {
     </div>
   );
 }
+
+export const TournamentTemplates = withOrganizerAuth(TournamentTemplatesPage);

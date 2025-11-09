@@ -8,4 +8,7 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   id: number;
+  role: UserRole;
 };
+
+export type UserRole = 'ORGANIZER' | 'ADMIN' | 'USER';
