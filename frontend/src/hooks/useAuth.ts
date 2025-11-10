@@ -7,6 +7,7 @@ import {
 } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { getProfile, PROFILE_KEY } from "@/lib/profile/profile.api";
+import { clearTokens } from "@/lib/apiClient";
 
 type Params = {
   onLoginInvalidOrExpired?: () => void;
@@ -27,7 +28,6 @@ export const useAuth = ({ onLoginInvalidOrExpired, onError }: Params = {}) => {
   const loginMutation = useMutation({
     mutationFn: apiLogin,
     onSuccess: (data) => {
-      // setAccessToken(data.accessToken);
       queryClient.setQueryData([PROFILE_KEY], data.user);
       router.push("/");
     },
@@ -47,9 +47,9 @@ export const useAuth = ({ onLoginInvalidOrExpired, onError }: Params = {}) => {
   const logoutMutation = useMutation({
     mutationFn: apiLogout,
     onSuccess: () => {
-      // clearAuth();
-      queryClient.clear();
-      // router.push('/login');
+      clearTokens();
+      queryClient.setQueryData([PROFILE_KEY], null);
+      router.push('/');
     },
   });
 
@@ -61,3 +61,5 @@ export const useAuth = ({ onLoginInvalidOrExpired, onError }: Params = {}) => {
     logout: logoutMutation.mutate,
   };
 };
+
+

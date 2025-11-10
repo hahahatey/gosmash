@@ -9,25 +9,32 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { Fragment } from "react";
+import { useAuth } from "@/hooks/useAuth";
+
+type Id = "profile" | "logout";
 
 const items = [
   {
     label: "Мой профиль",
-    url: "/profile",
+    id: "profile",
     Icon: User,
   },
   {
     label: "Выйти",
-    url: "logoit",
+    id: "logout",
     Icon: LogOut,
   },
-];
+] as const;
 
-type Props = {
-  userName: string;
-};
 
-export const UserDropdown: React.FC<Props> = ({ userName }) => {
+export const UserActionsDropdown = () => {
+  const { user, logout } = useAuth();
+
+  const handlersMap: Record<Id, () => void> = {
+    profile: () => {},
+    logout,
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -38,7 +45,7 @@ export const UserDropdown: React.FC<Props> = ({ userName }) => {
           <div className="h-8 w-8 rounded-full bg-sidebar-foreground/20 flex items-center justify-center">
             <User className="h-4 w-4 text-sidebar-foreground" />
           </div>
-          <span className="text-sm font-medium">{userName}</span>
+          <span className="text-sm font-medium">{user?.firstName}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -47,10 +54,10 @@ export const UserDropdown: React.FC<Props> = ({ userName }) => {
       >
         {/* <DropdownMenuLabel>Мой аккаунт</DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-border" /> */}
-        {items.map(({ url, Icon, label }, i) => (
-          <Fragment key={url}>
+        {items.map(({ id, Icon, label }, i) => (
+          <Fragment key={id}>
             <DropdownMenuItem
-              // onClick={() => navigate("/profile")}
+              onClick={handlersMap[id]}
               className="cursor-pointer"
             >
               <Icon className="mr-2 h-4 w-4" />

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { useAuth } from "@/hooks/useAuth";
-import { UserDropdown } from "@/components/navbar/UserDropdown";
+import { UserActionsDropdown } from "@/components/navbar/UserActionsDropdown";
 
 //  const navItems = [
 //     { name: 'Главная', path: '/' },
@@ -18,13 +18,6 @@ import { UserDropdown } from "@/components/navbar/UserDropdown";
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated } = useAuth();
-  const pathname = usePathname();
-
-  const getUserDisplayName = () => {
-    if (!user || typeof user !== "object") return "";
-    const userObj = user as any;
-    return (userObj.firstName || userObj.telegramNickname || "").toString();
-  };
 
   return (
     <nav className="bg-sidebar text-sidebar-foreground backdrop-blur-sm border-b border-sidebar-border sticky top-0 z-50">
@@ -43,7 +36,7 @@ export const Navbar = () => {
             <ThemeSwitcher />
             {isAuthenticated && user && (
               <div className="hidden md:flex">
-                 <UserDropdown userName={getUserDisplayName()} />
+                 <UserActionsDropdown />
               </div>
             )}
             {!isAuthenticated && (
@@ -72,7 +65,7 @@ export const Navbar = () => {
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && (
+        {/* {isOpen && (
           <div className="md:hidden border-t border-tennis-clay/20 bg-white">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {isAuthenticated && user && (
@@ -94,7 +87,7 @@ export const Navbar = () => {
               )}
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </nav>
   );

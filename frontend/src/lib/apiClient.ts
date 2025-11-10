@@ -1,4 +1,3 @@
-
 interface ApiClientOptions {
   baseUrl: string;
 }
@@ -8,7 +7,7 @@ export const createAuthApiClient = ({ baseUrl }: ApiClientOptions) => {
   let refreshSubscribers: Array<(token: string) => void> = [];
 
   const onAccessTokenFetched = (accessToken: string) => {
-    refreshSubscribers.forEach(callback => callback(accessToken));
+    refreshSubscribers.forEach((callback) => callback(accessToken));
     refreshSubscribers = [];
   };
 
@@ -17,16 +16,9 @@ export const createAuthApiClient = ({ baseUrl }: ApiClientOptions) => {
   };
 
   const getTokens = () => {
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
     return { accessToken, refreshToken };
-  };
-
-  const clearTokens = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    // Здесь можно вызвать колбэк на logout (например, обновить состояние Redux/Zustand)
-    console.log('User logged out due to token expiration');
   };
 
   const refreshToken = async (): Promise<string | null> => {
@@ -38,19 +30,19 @@ export const createAuthApiClient = ({ baseUrl }: ApiClientOptions) => {
 
     try {
       const res = await fetch(`${baseUrl}/auth/refresh`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${currentRefreshToken}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentRefreshToken}`,
         },
       });
 
       if (res.ok) {
         const data = await res.json();
-        localStorage.setItem('accessToken', data.accessToken);
+        localStorage.setItem("accessToken", data.accessToken);
         // Опционально: обновить refreshToken, если сервер его возвращает
         if (data.refreshToken) {
-          localStorage.setItem('refreshToken', data.refreshToken);
+          localStorage.setItem("refreshToken", data.refreshToken);
         }
         return data.accessToken;
       } else {
@@ -58,7 +50,7 @@ export const createAuthApiClient = ({ baseUrl }: ApiClientOptions) => {
         return null;
       }
     } catch (error) {
-      console.error('Refresh failed:', error);
+      console.error("Refresh failed:", error);
       clearTokens();
       return null;
     }
@@ -72,8 +64,8 @@ export const createAuthApiClient = ({ baseUrl }: ApiClientOptions) => {
 
     // Добавляем accessToken ко всем запросам (кроме /auth/*, если нужно)
     const headers = new Headers(options.headers);
-    if (accessToken && !url.startsWith('/auth/')) {
-      headers.set('Authorization', `Bearer ${accessToken}`);
+    if (accessToken && !url.startsWith("/auth/")) {
+      headers.set("Authorization", `Bearer ${accessToken}`);
     }
 
     let response = await fetch(`${baseUrl}${url}`, {
@@ -91,7 +83,7 @@ export const createAuthApiClient = ({ baseUrl }: ApiClientOptions) => {
         if (newAccessToken) {
           // Повторяем оригинальный запрос с новым токеном
           const newHeaders = new Headers(options.headers);
-          newHeaders.set('Authorization', `Bearer ${newAccessToken}`);
+          newHeaders.set("Authorization", `Bearer ${newAccessToken}`);
           response = await fetch(`${baseUrl}${url}`, {
             ...options,
             headers: newHeaders,
@@ -109,7 +101,7 @@ export const createAuthApiClient = ({ baseUrl }: ApiClientOptions) => {
 
         if (newAccessToken) {
           const newHeaders = new Headers(options.headers);
-          newHeaders.set('Authorization', `Bearer ${newAccessToken}`);
+          newHeaders.set("Authorization", `Bearer ${newAccessToken}`);
           response = await fetch(`${baseUrl}${url}`, {
             ...options,
             headers: newHeaders,
@@ -122,8 +114,7 @@ export const createAuthApiClient = ({ baseUrl }: ApiClientOptions) => {
 
     if (response.ok) {
       return response.json();
-    }
-    else {
+    } else {
       const errorData = await response.json();
       // Передаём весь объект ошибки, чтобы можно было проверить errorCode
       throw errorData;
@@ -131,4 +122,11 @@ export const createAuthApiClient = ({ baseUrl }: ApiClientOptions) => {
   };
 
   return authFetch;
+};
+
+export const clearTokens = () => {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
+  // Здесь можно вызвать колбэк на logout (например, обновить состояние Redux/Zustand)
+  console.log("User logged out due to token expiration");
 };
