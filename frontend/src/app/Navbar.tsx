@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X, Trophy, User } from "lucide-react";
+import { Menu, X, Trophy, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { useAuth } from "@/hooks/useAuth";
+import { UserDropdown } from "@/components/navbar/UserDropdown";
 
 //  const navItems = [
 //     { name: 'Главная', path: '/' },
@@ -41,13 +42,8 @@ export const Navbar = () => {
           <div className="flex items-center space-x-4">
             <ThemeSwitcher />
             {isAuthenticated && user && (
-              <div className="hidden md:flex items-center space-x-2">
-                <div className="h-8 w-8 rounded-full bg-sidebar-foreground/20 flex items-center justify-center">
-                  <User className="h-4 w-4 text-sidebar-foreground" />
-                </div>
-                <span className="text-sm font-medium text-sidebar-foreground">
-                  {getUserDisplayName()}
-                </span>
+              <div className="hidden md:flex">
+                 <UserDropdown userName={getUserDisplayName()} />
               </div>
             )}
             {!isAuthenticated && (
