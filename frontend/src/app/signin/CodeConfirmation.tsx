@@ -13,7 +13,7 @@ type Props = {
 
 export const CodeConfirmation: React.FC<Props> = ({ code, onCodeChanged }) => {
   return (
-    <div className="w-full max-w-md m-auto">
+    <div className="w-full h-full max-w-md m-auto flex items-center">
       <div className="rounded-2xl shadow-xl p-8 border bg-card text-card-foreground">
         <Button
           // onClick={onBack}

@@ -36,10 +36,12 @@ export default function RootLayout({
       >
         <QueryProvider>
           <AuthProvider>
-          <Navbar />
+            <Navbar />
             <Toaster />
             <Analytics />
-            {children}
+            <main className="h-full">
+              {children}
+            </main>
           </AuthProvider>
         </QueryProvider>
       </body>

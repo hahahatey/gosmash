@@ -295,6 +295,10 @@
       rgba(139, 57, 33, 0.8) 100%
     );
   }
+
+  .page-container {
+    @apply h-full mx-auto max-w-7xl px-[clamp(1rem,5vw,3rem)] py-8;
+  }
 }
 
 @layer base {
@@ -305,40 +309,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-.ProseMirror {
-  outline: none;
-  padding: 0.5rem 0;
-  min-height: 100px;
-}
-
-.ProseMirror p {
-  margin: 0.5em 0;
-}
-
-.ProseMirror > * + * {
-  margin-top: 0.5em;
-}
-
-.ProseMirror ul,
-.ProseMirror ol {
-  padding-left: 1.2rem;
-  margin: 0.5em 0;
-}
-
-.ProseMirror li {
-  margin: 0.2em 0;
-}
-
-.ProseMirror blockquote {
-  border-left: 3px solid #ddd;
-  padding-left: 1rem;
-  margin: 0.5em 0;
-}
-
-/* Focus для accessibility */
-.ProseMirror:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
 }

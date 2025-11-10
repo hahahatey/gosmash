@@ -86,7 +86,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="w-full max-w-md m-auto flex items-center">
+    <div className="w-full h-full max-w-md m-auto flex items-center">
       <div className="rounded-2xl shadow-xl p-8 border bg-card text-card-foreground">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full mb-4">

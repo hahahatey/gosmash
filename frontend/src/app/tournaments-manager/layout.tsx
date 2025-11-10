@@ -26,7 +26,7 @@ export default function TournamentsManagerLayout({
   };
 
   return (
-    <div className="w-full h-full max-w-5xl m-auto flex items-center">
+    <div className="page-container">
       <div className="flex w-full h-full bg-sidebar rounded-2xl border">
         <div className="h-full px-5 py-3 bg-sidebar text-sidebar-foreground rounded-2xl flex flex-col gap-1">
           {items.map(({url, label}) => (
