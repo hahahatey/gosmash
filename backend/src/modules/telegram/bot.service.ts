@@ -34,16 +34,17 @@ export class BotService {
 
     if (callbackQuery.data === 'get_code') {
       await ctx.answerCbQuery();
-      this.getLoginCode(ctx);
+      this.sendLoginCode(ctx);
+      return;
     }
   }
 
   @Command('get_login_code')
   async onGetCode(@Ctx() ctx: Context) {
-    await this.getLoginCode(ctx);
+    await this.sendLoginCode(ctx);
   }
 
-  async getLoginCode(ctx: Context) {
+  async sendLoginCode(ctx: Context) {
     const user = ctx.from?.username
       ? await this.authService.getUserByTelegramNick(`@${ctx.from.username}`)
       : null;
@@ -56,8 +57,34 @@ export class BotService {
 
     const code = await this.authService.createLoginCode(user.id);
 
-    await ctx.reply(`Ваш код входа: *${code}*\nДействует 5 минут\\.`, {
-      parse_mode: 'MarkdownV2',
+    //const messageText = `<span class="tg-spoiler">${code}</span>\n\nЭто код для входа. Нажми на размытый текст, чтобы раскрыть, и выдели для копирования.`;
+    //const description = this.escapeMarkdownV2('Это код для входа. Или используй кнопку ниже для быстрого копирования.');
+    //const messageText = `||\`${code}\`||\\n\\n${description}`;
+    //const messageText = `<span class="tg-spoiler"><code>${code}</code></span>\n\nЭто код для входа. Нажми на размытый блок — он раскроется, и тапни на код, чтобы скопировать в буфер.`;
+    let messageText = `Ваш код входа: ||\`${code}\`||\n`;
+ 
+    const keyboard = {
+      inline_keyboard: [
+        [
+          // Кнопка для копирования (тип copy_text)
+          {
+            text: '📋 Скопировать код',
+            copy_text: {
+              text: code, // Текст для копирования (твой код)
+            },
+          },
+        ],
+      ],
+    };
+   
+    await ctx.reply(messageText, {
+      // parse_mode: 'HTML',
+      reply_markup: keyboard as any,
+      parse_mode: 'MarkdownV2', // Для || и `
     });
+  }
+
+  private escapeMarkdownV2(text: string): string {
+    return text.replace(/([_*[\]()~`>#+-=|{}.!\\])/g, '\\$1');
   }
 }
