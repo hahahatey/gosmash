@@ -25,32 +25,20 @@ export class AuthService {
       firstName,
       lastName,
       email,
-      phone,
-      password,
       telegramNickname,
       birthDate,
     } = dto;
 
-    //TODO::remove
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const data: UserUncheckedCreateInput = {
+    const data = {
       firstName,
       lastName,
       email,
-      phone,
-      password: hashedPassword,
       telegramNickname,
       birthDate: new Date(birthDate),
     };
 
-    await this.prisma.user.create({
-      data: {
-        ...data,
-        //TODO::remove
-        isVerified: false,
-      },
-    });
+    await this.prisma.user.create({data});
+    return {success: true};
   }
 
   async getUserByTelegramNick(telegramNick: string): Promise<User | null> {
@@ -127,7 +115,12 @@ export class AuthService {
       data: { used: true },
     });
 
-    return { tokens: await this.generateTokens(user.id, user.role), user };
+    const { telegramId, ...userWithoutTelegramId } = user;
+
+    return {
+      tokens: await this.generateTokens(user.id, user.role),
+      user: userWithoutTelegramId,
+    };
   }
 
   // Проверка и обновление refresh-токена
@@ -176,6 +169,15 @@ export class AuthService {
     const hashed = this.hashToken(refreshToken);
     await this.prisma.refreshToken.deleteMany({
       where: { token: hashed },
+    });
+  }
+
+  updateTelegramId(nickname: string, telegramId: number) {
+    return this.prisma.user.update({
+      where: { telegramNickname: nickname },
+      data: {
+        telegramId,
+      },
     });
   }
 }

@@ -9,14 +9,15 @@ import { useState } from "react";
 type Props = {
   code: string;
   onCodeChanged: (code: string) => void;
+  onBack: () => void;
 };
 
-export const CodeConfirmation: React.FC<Props> = ({ code, onCodeChanged }) => {
+export const CodeConfirmation: React.FC<Props> = ({ code, onCodeChanged, onBack }) => {
   return (
     <div className="w-full h-full max-w-md m-auto flex items-center">
       <div className="rounded-2xl shadow-xl p-8 border bg-card text-card-foreground">
         <Button
-          // onClick={onBack}
+          onClick={onBack}
           variant="ghost"
           className="flex items-center gap-2 mb-6 transition-colors"
         >

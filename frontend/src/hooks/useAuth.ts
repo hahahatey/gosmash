@@ -8,13 +8,16 @@ import {
 import { useRouter } from "next/navigation";
 import { getProfile, PROFILE_KEY } from "@/lib/profile/profile.api";
 import { clearTokens } from "@/lib/apiClient";
+import { useEffect } from "react";
+import { saveToStorageTelegramNickname } from "@/lib/auth/utils";
 
 type Params = {
   onLoginInvalidOrExpired?: () => void;
   onError?: () => void;
+  disableProfileQuery?: boolean;
 };
 
-export const useAuth = ({ onLoginInvalidOrExpired, onError }: Params = {}) => {
+export const useAuth = ({ onLoginInvalidOrExpired, onError, disableProfileQuery = false }: Params = {}) => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -23,7 +26,14 @@ export const useAuth = ({ onLoginInvalidOrExpired, onError }: Params = {}) => {
     queryFn: getProfile,
     retry: false,
     refetchOnWindowFocus: false,
+    enabled: !disableProfileQuery,
   });
+
+  const nickname = profileQuery.data?.telegramNickname;
+
+  useEffect(() => {
+    nickname && saveToStorageTelegramNickname(nickname);
+  }, [nickname]);
 
   const loginMutation = useMutation({
     mutationFn: apiLogin,

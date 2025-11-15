@@ -63,3 +63,11 @@ export function isOrganizer(): boolean {
 export function isAuthenticated(): boolean {
   return getUserRoleFromToken() !== null;
 }
+
+export const saveToStorageTelegramNickname = (nickname: string) => {
+  // localStorage.setItem('gosmash_telegram_nick', nickname);
+}
+
+export const getStoragedTelegramNickname = () => {
+  // localStorage.getItem('gosmash_telegram_nick');
+}

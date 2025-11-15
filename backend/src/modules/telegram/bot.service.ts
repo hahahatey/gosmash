@@ -1,14 +1,25 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { randomInt } from 'crypto';
 import { PrismaService } from 'database/prisma.service';
-import { Command, Ctx, Hears, On, Start, Update } from 'nestjs-telegraf';
-import { Context, Markup } from 'telegraf';
+import {
+  Command,
+  Ctx,
+  Hears,
+  InjectBot,
+  On,
+  Start,
+  Update,
+} from 'nestjs-telegraf';
+import { Context, Markup, Telegraf } from 'telegraf';
 import { AuthService } from '../auth/auth.service';
 
 @Update()
 @Injectable()
 export class BotService {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    @InjectBot() private bot: Telegraf<Context>,
+  ) {}
 
   // Обработчик команды /start — показываем меню
   @Start()
@@ -20,6 +31,14 @@ export class BotService {
         [Markup.button.callback('🔐 Получить код входа', 'get_code')], // Кнопка для отправки кода
       ]),
     );
+
+    if (ctx.from?.username && ctx?.chat?.id) {
+      console.log(ctx.from?.username, ctx.chat.id);
+      await this.authService.updateTelegramId(
+        `@${ctx.from?.username}`,
+        ctx.chat.id,
+      );
+    }
   }
 
   @On('callback_query')
@@ -62,11 +81,10 @@ export class BotService {
     //const messageText = `||\`${code}\`||\\n\\n${description}`;
     //const messageText = `<span class="tg-spoiler"><code>${code}</code></span>\n\nЭто код для входа. Нажми на размытый блок — он раскроется, и тапни на код, чтобы скопировать в буфер.`;
     let messageText = `Ваш код входа: ||\`${code}\`||\n`;
- 
+
     const keyboard = {
       inline_keyboard: [
         [
-          // Кнопка для копирования (тип copy_text)
           {
             text: '📋 Скопировать код',
             copy_text: {
@@ -76,7 +94,7 @@ export class BotService {
         ],
       ],
     };
-   
+
     await ctx.reply(messageText, {
       // parse_mode: 'HTML',
       reply_markup: keyboard as any,
@@ -84,7 +102,61 @@ export class BotService {
     });
   }
 
-  private escapeMarkdownV2(text: string): string {
-    return text.replace(/([_*[\]()~`>#+-=|{}.!\\])/g, '\\$1');
+  // private escapeMarkdownV2(text: string): string {
+  //   return text.replace(/([_*[\]()~`>#+-=|{}.!\\])/g, '\\$1');
+  // }
+
+  async sendLoginCodeToNickname(nickname: string) {
+    const user = await this.authService.getUserByTelegramNick(`@${nickname}`);
+    if (!user) {
+      return {
+        error: {
+          type: 'USER_IS_NOT_FOUND',
+        },
+        success: false,
+      };
+    }
+
+    if (!user.telegramId) {
+      return {
+        error: {
+          type: 'START_CHAT_WITH_BOT',
+        },
+        success: false,
+      };
+    }
+
+    const code = await this.authService.createLoginCode(user.id);
+    const { messageText, keyboard } = this.formatLoginCodeMessage(code);
+    try {
+      await this.bot.telegram.sendMessage(
+        user.telegramId.toString(),
+        messageText,
+        {
+          reply_markup: keyboard as any,
+          parse_mode: 'MarkdownV2',
+        },
+      );
+      return { success: true };
+    } catch (e) {
+      return { success: false };
+    }
+  }
+
+  formatLoginCodeMessage(code: string) {
+    let messageText = `Ваш код входа: ||\`${code}\`||\n`;
+    const keyboard = {
+      inline_keyboard: [
+        [
+          {
+            text: '📋 Скопировать код',
+            copy_text: {
+              text: code, // Текст для копирования (твой код)
+            },
+          },
+        ],
+      ],
+    };
+    return { messageText, keyboard };
   }
 }

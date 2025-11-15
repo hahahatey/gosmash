@@ -63,7 +63,7 @@ export interface InputProps extends React.ComponentProps<"input"> {
   endIcon?: React.ReactNode
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const Input = React.memo(React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, startIcon, endIcon, ...props }, ref) => {
     return (
       <div
@@ -94,7 +94,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       </div>
     )
   }
-)
+))
 
 Input.displayName = "Input"
 

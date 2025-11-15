@@ -10,7 +10,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use((req, res, next) => {
-    console.log('pyk');
     // Разрешить только твой фронтенд
     if (req.headers.origin === 'http://localhost:3001') {
       res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
@@ -38,6 +37,8 @@ async function bootstrap() {
 
   const telegramService = app.get(TelegramService);
 
+  app.useGlobalFilters(new AllExceptionsFilter()); // Регистрация глобального фильтра
+
   // app.enableCors({
   //   origin: 'http://localhost:3001', // Specific origin
   //   // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -49,12 +50,12 @@ async function bootstrap() {
 
   // app.useGlobalInterceptors(new CorsInterceptor());
 
-  try {
-    await telegramService.setWebhook();
-    console.log(`✅ Webhook set`);
-  } catch (error) {
-    console.error('❌ Failed to set webhook:', error.message);
-  }
+  // try {
+  //   await telegramService.setWebhook();
+  //   console.log(`✅ Webhook set`);
+  // } catch (error) {
+  //   console.error('❌ Failed to set webhook:', error.message);
+  // }
 }
 bootstrap();
 
@@ -66,6 +67,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { AllExceptionsFilter } from './shared/allExceptionsFilter';
 
 @Injectable()
 export class CorsInterceptor implements NestInterceptor {

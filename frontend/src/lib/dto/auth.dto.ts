@@ -10,3 +10,11 @@ export type SignInResponse = {
   refreshToken: string;
   user: User;
 }
+
+export type SignUpRequest = {
+  firstName: string;
+  lastName: string;
+  birthDate?: string;
+  email: string;
+  telegramNickname: string;
+}

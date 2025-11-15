@@ -4,6 +4,7 @@ import { BotService } from './bot.service';
 import { AuthModule } from '../auth/auth.module'; // ← нужен для AuthService
 import { TelegramService } from './telegram.service';
 import { HttpModule } from '@nestjs/axios';
+import { TelegramController } from './telegram.controller';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { HttpModule } from '@nestjs/axios';
     //   }),
     // }),
   ],
+  controllers: [TelegramController],
   providers: [BotService, TelegramService],
   exports: [BotService, TelegramService], // на случай, если понадобится где-то ещё
 })

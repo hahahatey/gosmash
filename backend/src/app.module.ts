@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AuthModule } from './modules/auth/auth.module';
 import { PrismaService } from 'database/prisma.service';
 import { ConfigModule } from '@nestjs/config';
@@ -7,6 +7,7 @@ import { TelegramModule } from './modules/telegram/telegram.module';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { BotService } from './modules/telegram/bot.service';
 import { TournamentsModule } from './modules/tournaments/tournaments.module';
+import { LoggingMiddleware } from './shared/middlewares/logging';
 // ... другие модули
 
 @Module({
@@ -25,4 +26,8 @@ import { TournamentsModule } from './modules/tournaments/tournaments.module';
   providers: [PrismaService],
   // ...
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggingMiddleware).forRoutes('*'); // Применить ко всем маршрутам
+  }
+}

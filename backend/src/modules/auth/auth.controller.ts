@@ -77,7 +77,8 @@ export class AuthController {
   @Get('profile')
   getProfile(@Req() req) {
     // req — это Express Request объект
-    return req.user; // установленный JwtStrategy
+    const {telegramId, ...rest} = req.user;
+    return rest; // установленный JwtStrategy
   }
 
   @Post('logout')
