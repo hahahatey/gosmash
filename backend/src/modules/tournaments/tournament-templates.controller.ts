@@ -1,4 +1,14 @@
-import { Body, Controller, Post, Put, UseGuards, Param, Get, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Put,
+  UseGuards,
+  Param,
+  Get,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Role } from '@prisma/client';
 // import { TournamentTemplatesService } from './tournament-templates.service';
@@ -43,10 +53,16 @@ export class TournamentTemplatesController {
 
   @Delete(':id')
   @Roles(Role.ORGANIZER)
-  delete(
-    @Param('id') id: string,
-    @CurrentUser() user: CurrentUserType,
-  ) {
+  delete(@Param('id') id: string, @CurrentUser() user: CurrentUserType) {
     return this.service.deleteTournamentTemplateById(+id, user.id);
+  }
+
+  @Get('autocomplete')
+  async getAutocomplete(@Query('queryName') queryName: string) {
+    if (!queryName || queryName.length < 2) {
+      return [];
+    }
+
+    return this.service.getTournamentTemplatesByName(queryName);
   }
 }

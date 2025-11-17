@@ -4,11 +4,11 @@ import { usePathname, useRouter } from "next/navigation";
 
 const items = [
   {
-    url: "tournament-templates",
+    url: "/tournaments-manager/tournament-templates",
     label: "Шаблоны турниров",
   },
   {
-    url: "tournament-templates1",
+    url: "/tournaments-manager/tournaments",
     label: "Турниры",
   },
 ];
@@ -22,7 +22,7 @@ export default function TournamentsManagerLayout({
   const router = useRouter();
 
   const handleClick = (url: string) => () => {
-    router.push(`${pathname}/${url}`);
+    router.push(url);
   };
 
   return (

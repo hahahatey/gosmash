@@ -64,12 +64,20 @@ model TournamentTemplate {
   organizer   User         @relation("TemplateTournaments", fields: [organizerId], references: [id])
 }
 
+enum TournamentCategory {
+  MENS_SINGLES
+  MENS_DOUBLES
+  WOMENS_SINGLES
+  WOMENS_DOUBLES
+  MIXED_DOUBLES
+  PRO_AM
+}
+
 model Tournament {
-  id                 Int      @id @default(autoincrement())
-  startsAt           DateTime
-  registrationEndsAt DateTime
-  createdAt          DateTime @default(now())
-  fee                Float
+  id        Int      @id @default(autoincrement())
+  startsAt  DateTime
+  createdAt DateTime @default(now())
+  fee       Float
 
   // Связи
   templateId  Int
@@ -78,6 +86,8 @@ model Tournament {
   organizer   User               @relation("OrganizerTournaments", fields: [organizerId], references: [id])
 
   participants TournamentParticipant[]
+  category     TournamentCategory
+  rating       String
 }
 
 model TournamentParticipant {

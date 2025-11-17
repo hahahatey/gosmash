@@ -1,4 +1,4 @@
-import { TournamentTemplate } from "@/models/tournaments";
+import { TournamentTemplate } from "@/models/tournaments/types";
 import { apiClient } from "../api";
 import { CreateTournamentTemplateDto } from "../dto/tournaments.dto";
 
@@ -18,13 +18,26 @@ export const getTournamentTemplates = (): Promise<TournamentTemplate[]> => {
   });
 };
 
-export const deleteTournamentTemplate = (id: number): Promise<TournamentTemplate[]> => {
+export const deleteTournamentTemplate = (
+  id: number
+): Promise<TournamentTemplate[]> => {
   return apiClient(`/tournament-templates/${id}`, {
     method: "DELETE",
   });
 };
 
+export type TournamentTemplatesByQueryResponse = Pick<TournamentTemplate, "id" | "name">[];
+
+export const getTournamentTemplatesByQuery = (
+  query: string
+): Promise<TournamentTemplatesByQueryResponse> => {
+  return apiClient(`/tournament-templates/autocomplete?queryName=${query}`, {
+    method: "GET",
+  });
+};
+
 export const TOURNAMENT_TEMPLATES_KEY = ["tournament-templates"];
+export const getTournamentTemplatesByQueryKey = (query: string) => ["tournament-templates/autocomplete", query];
 export const getTournamentTemplateKey = (templateId: string) => [
   TOURNAMENT_TEMPLATES_KEY,
   templateId,
